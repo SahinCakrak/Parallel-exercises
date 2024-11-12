@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdio>
 #include <algorithm>
+#include <chrono>
 
 
 void output_T(int j, std::vector<double> T, int nx, double dt) //outputs temperature and current time of simulation
@@ -32,14 +33,14 @@ double get_2nd_der(int i, double dx, std::vector<double> T) //for the second spa
 int main(){
     int s = 1000;
     int nx = 1000;
-    int nt = 10000;  
+    int nt = 1000000;  
     double lambda = 2;
     double T0 = 0.7;
     double T1 = 0;
     double T2 = 1;
     double dt;
     double dx;
-    double tmax = 1000;
+    double tmax = 100000;
     /*
     std::cout<<"initialize width of wall \n";  //initialize all variables
     std::cin>>s;
@@ -64,15 +65,15 @@ int main(){
     Tcopy.resize(T.size());
     T[0] = T1;
     T[nx-1] = T2;
-    dx = s/(double) nx; // not sure if this correct since suggested DFl would differ
-    dt = tmax/nt; //same as above comment
+    dx = s/(double) nx; 
+    dt = tmax/nt; 
     double cfl = dt/dx;
     double dfl = lambda*dt/(dx*dx);
     std::cout<<"the Courant-Friedrichs-Lewy-number is: "<<cfl<<"\n";
     std::cout<<"the diffusive cfl number is: "<<dfl<<"\n";
-
+    
     output_T(0, T, nx,  dt);
-
+    auto start = std::chrono::high_resolution_clock::now(); //Laufzeit-Messung Beginn
     for(int j=0; j<nt; j++){
         std::copy(T.begin(), T.end(), Tcopy.begin());
             
@@ -81,6 +82,10 @@ int main(){
             }
         
     }
+    auto stop = std::chrono::high_resolution_clock::now(); //Ende der Laufzeit-Messung
     output_T( tmax , T, nx,dt);
+    std::cout<<" \n";
+    auto duration = duration_cast<std::chrono::seconds>(stop - start);
+    std::cout<< "The duration of the program was "<<duration.count()<< " seconds"<<std::endl;
     return 0;
 }
