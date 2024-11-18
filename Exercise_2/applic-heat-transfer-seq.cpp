@@ -85,7 +85,7 @@ int main(){
     auto stop = std::chrono::high_resolution_clock::now(); //Ende der Laufzeit-Messung
     output_T( tmax , T, nx,dt);
     std::cout<<" \n";
-    auto duration = duration_cast<std::chrono::seconds>(stop - start);
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
     std::cout<< "The duration of the program was "<<duration.count()<< " seconds"<<std::endl;
     return 0;
 }
