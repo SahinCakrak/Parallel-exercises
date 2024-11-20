@@ -5,8 +5,10 @@ int main() {
     // Parallel region
     #pragma omp parallel
     {
+        #pragma omp critical
+        {
         std::cout << "Hello world from thread " << omp_get_thread_num() << std::endl;
-
+        }
         // Synchronize to ensure all threads finish printing before moving forward
         #pragma omp barrier
 
